@@ -21,9 +21,10 @@ services:
   # APPLICATION SERVICES (SKELETON)
   # =====================
   frontend:
-    image: python:3.11-slim
+    build: ./services/frontend
     container_name: frontend
-    command: sleep infinity
+    ports:
+      - "8000:80"
     networks:
       - devops-net
 
