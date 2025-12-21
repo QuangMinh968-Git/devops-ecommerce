@@ -14,7 +14,7 @@ static_resources:
                 route_config:
                   name: local_route
                   virtual_hosts:
-                    - name: frontend
+                    - name: frontend_service
                       domains: ["*"]
                       routes:
                         - match:
@@ -23,6 +23,8 @@ static_resources:
                             cluster: frontend
                 http_filters:
                   - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
 
   clusters:
     - name: frontend
@@ -38,3 +40,4 @@ static_resources:
                     socket_address:
                       address: frontend
                       port_value: 80
+
