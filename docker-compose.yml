@@ -1,0 +1,151 @@
+networks:
+  devops-net:
+    driver: bridge
+
+services:
+
+  # =====================
+  # GATEWAY
+  # =====================
+  envoy:
+    image: envoyproxy/envoy:v1.30-latest
+    container_name: envoy
+    volumes:
+      - ./gateway/envoy/envoy.yaml:/etc/envoy/envoy.yaml
+    ports:
+      - "8080:8080"
+    networks:
+      - devops-net
+
+  # =====================
+  # APPLICATION SERVICES (SKELETON)
+  # =====================
+  frontend:
+    image: python:3.11-slim
+    container_name: frontend
+    command: sleep infinity
+    networks:
+      - devops-net
+
+  checkout:
+    image: python:3.11-slim
+    container_name: checkout
+    command: sleep infinity
+    networks:
+      - devops-net
+
+  product:
+    image: python:3.11-slim
+    container_name: product
+    command: sleep infinity
+    networks:
+      - devops-net
+
+  cart:
+    image: python:3.11-slim
+    container_name: cart
+    command: sleep infinity
+    networks:
+      - devops-net
+
+  payment:
+    image: python:3.11-slim
+    container_name: payment
+    command: sleep infinity
+    networks:
+      - devops-net
+
+  shipping:
+    image: python:3.11-slim
+    container_name: shipping
+    command: sleep infinity
+    networks:
+      - devops-net
+
+  email:
+    image: python:3.11-slim
+    container_name: email
+    command: sleep infinity
+    networks:
+      - devops-net
+
+  fraud:
+    image: python:3.11-slim
+    container_name: fraud
+    command: sleep infinity
+    networks:
+      - devops-net
+
+  accounting:
+    image: python:3.11-slim
+    container_name: accounting
+    command: sleep infinity
+    networks:
+      - devops-net
+
+  recommendation:
+    image: python:3.11-slim
+    container_name: recommendation
+    command: sleep infinity
+    networks:
+      - devops-net
+
+  currency:
+    image: python:3.11-slim
+    container_name: currency
+    command: sleep infinity
+    networks:
+      - devops-net
+
+  # =====================
+  # DATA LAYER
+  # =====================
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      POSTGRES_USER: devops
+      POSTGRES_PASSWORD: devops
+      POSTGRES_DB: ecommerce
+    ports:
+      - "5432:5432"
+    networks:
+      - devops-net
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - devops-net
+
+  # =====================
+  # MESSAGING
+  # =====================
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - devops-net
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    networks:
+      - devops-net
