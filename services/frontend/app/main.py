@@ -1,6 +1,9 @@
 from fastapi import FastAPI
+import requests
 
 app = FastAPI(title="Frontend Service")
+
+CHECKOUT_SERVICE_URL = "http://checkout"
 
 @app.get("/health")
 def health():
@@ -8,8 +11,6 @@ def health():
 
 @app.post("/checkout")
 def checkout():
-    return {
-        "message": "Order received",
-        "status": "CREATED"
-    }
+    response = requests.post(f"{CHECKOUT_SERVICE_URL}/checkout")
+    return response.json()
 

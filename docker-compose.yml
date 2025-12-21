@@ -30,16 +30,14 @@ services:
       - devops-net
 
   checkout:
-    image: python:3.11-slim
+    build: ./services/checkout
     container_name: checkout
-    command: sleep infinity
     networks:
       - devops-net
 
   product:
-    image: python:3.11-slim
+    build: ./services/product
     container_name: product
-    command: sleep infinity
     networks:
       - devops-net
 
