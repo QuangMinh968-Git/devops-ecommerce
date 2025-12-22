@@ -15,6 +15,7 @@ services:
       - ./gateway/envoy/envoy.yaml:/etc/envoy/envoy.yaml
     ports:
       - "8080:8080"
+      - "9901:9901"
     networks:
       - devops-net
 
@@ -37,7 +38,33 @@ services:
     depends_on:
       - jaeger
     networks:
-      - devops-net    
+      - devops-net
+
+  # =====================
+  # OBSERVABILITY - METRICS
+  # =====================
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    container_name: prometheus
+    volumes:
+      - ./observabilityprometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+    networks:
+      - devops-net
+
+  grafana:
+    image: grafana/grafana:10.4.2
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - devops-net
+    
 
   # =====================
   # APPLICATION SERVICES (SKELETON)
