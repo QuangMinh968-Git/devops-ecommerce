@@ -1,0 +1,26 @@
+# Environment
+.env
+.env.*
+
+# Runtime data
+data/
+datapostgres/
+dataredis/
+
+# Observability runtime
+observabilitygrafana/data/
+observabilityprometheus/data/
+observabilityopensearch/data/
+
+# Logs
+*.log
+
+# OS / IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Node / Python cache
+node_modules/
+__pycache__/
+
