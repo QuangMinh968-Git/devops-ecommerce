@@ -18,6 +18,27 @@ services:
     networks:
       - devops-net
 
+  jaeger:
+    image: jaegertracing/all-in-one:1.57
+    container_name: jaeger
+    ports:
+      - "16686:16686"   # Jaeger UI
+    networks:
+      - devops-net
+
+  otel-collector:
+    image: otel/opentelemetry-collector:0.97.0
+    container_name: otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./observabilityotel-collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"
+    depends_on:
+      - jaeger
+    networks:
+      - devops-net    
+
   # =====================
   # APPLICATION SERVICES (SKELETON)
   # =====================
