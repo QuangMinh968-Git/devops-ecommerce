@@ -8,7 +8,7 @@ services:
   # GATEWAY
   # =====================
   envoy:
-    image: envoyproxy/envoy:v1.30-latest
+    image: envoyproxy/envoy-contrib:v1.30-latest
     container_name: envoy
     command: ["envoy", "-c", "/etc/envoy/envoy.yaml", "--log-level", "info"]
     volumes:
